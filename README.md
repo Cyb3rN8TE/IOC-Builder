@@ -13,7 +13,7 @@ Indicators of Compromise (IOC) are often uncategorised when provided in spreadsh
 2) Searches the spreadsheet for all IP addresses, domains and URLs
 3) Refangs any values that are IP addresses, domains or URLs
 4) Places these values in a new columns under the appropriate heading.
-5) Saves the resulting .XLSX file with a name and location of the users selection. 
+5) Saves the resulting .XLSX or .CSV file with a name and location of the users selection. 
 
 **Prerequisites:**
 
