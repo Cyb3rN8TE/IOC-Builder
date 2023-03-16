@@ -23,10 +23,10 @@ Write-Host -ForegroundColor White '8888888 "Y88888P"   "Y8888P"       8888888P" 
 Write-Host ""
 Write-Host "Please select your file for processing.."
 
-# Prompt user to select Excel file
+# Prompt user to select file
 $openFileDialog = New-Object System.Windows.Forms.OpenFileDialog
-$openFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx|All Files (*.*)|*.*"
-$openFileDialog.Title = "Select an Excel file"
+$openFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx|CSV Files (*.csv)|*.csv|All Files (*.*)|*.*"
+$openFileDialog.Title = "Select a file"
 $dialogResult = $openFileDialog.ShowDialog()
 
 if ($dialogResult -ne [System.Windows.Forms.DialogResult]::OK) {
@@ -77,17 +77,27 @@ $ipRange.SpecialCells([Microsoft.Office.Interop.Excel.XlCellType]::xlCellTypeBla
 
 Write-Host "Processing complete.."
 
-# Display dialog box to prompt user for file name and path to save CSV
+# Display dialog box to prompt user for file name and path to save
 $saveFileDialog = New-Object System.Windows.Forms.SaveFileDialog
-$saveFileDialog.Title = "Save CSV"
-$saveFileDialog.Filter = "CSV Files (*.csv)|*.csv"
+$saveFileDialog.Title = "Save File"
+$saveFileDialog.Filter = "Excel Files (*.xlsx)|*.xlsx|CSV Files (*.csv)|*.csv"
 $saveFileDialog.ShowDialog() | Out-Null
 
 # Get the file name and path from the dialog box
-$csvFilePath = $saveFileDialog.FileName
+$filePath = $saveFileDialog.FileName
+$fileExtension = [System.IO.Path]::GetExtension($filePath)
 
-# Save as CSV
-$worksheet.SaveAs($csvFilePath, [Microsoft.Office.Interop.Excel.XlFileFormat]::xlCSV)
+# Save as either Excel or CSV
+if ($fileExtension -eq ".xlsx") {
+    $worksheet.SaveAs($filePath, [Microsoft.Office.Interop.Excel.XlFileFormat]::xlOpenXMLWorkbook)
+}
+elseif ($fileExtension -eq ".csv") {
+    $worksheet.SaveAs($filePath, [Microsoft.Office.Interop.Excel.XlFileFormat]::xlCSV)
+}
+else {
+    Write-Host "Invalid file type selected"
+    return
+}
 
 # Clean up
 $workbook.Close($false)
