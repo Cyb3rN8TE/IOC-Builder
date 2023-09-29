@@ -14,13 +14,5 @@ Indicators of Compromise (IOC) are often provided with defanged values in spread
 3) Refangs or defangs any values that are IP addresses, domains or URLs
 5) Saves the resulting .CSV file with a name and location of the users selection. 
 
-**Prerequisites:**
-
-- Windows 7 with Service Pack 1 (SP1)
-- Windows Vista with Service Pack 2 (SP2)
-- Windows 8
-- Windows 10
-- Windows 11
-
 **How to run the tool:**
 1) Right click iocbuilder.ps1 and select 'run with PowerShell'
