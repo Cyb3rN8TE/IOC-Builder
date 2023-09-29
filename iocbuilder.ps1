@@ -42,8 +42,25 @@ if ($choice -ne 'r' -and $choice -ne 'd') {
 # Load the CSV file
 $data = Import-Csv $openFileDialog.FileName
 
-# Iterate over each row in the CSV and refang/defang the specified columns
-foreach ($row in $data) {
+# Process the header row
+foreach ($column in $data[0].PSObject.Properties) {
+    if ($column.Value -is [string]) {
+        if ($choice -eq 'r') {
+            # Refang any IP address or URL found in the column
+            $column.Value = $column.Value -replace '\[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]', '$1'
+            $column.Value = $column.Value -replace '\[(\w+://[^/]+)(/.+)?\]', '$1$2'
+            $column.Value = $column.Value -replace '\[(\.|:)]', '$1'
+        } else {
+            # Defang any IP address or URL found in the column
+            $column.Value = $column.Value -replace '(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', '[$1]'
+            $column.Value = $column.Value -replace '(\.|:)', '[$&]'
+        }
+    }
+}
+
+# Iterate over each row in the CSV (starting from the second row)
+for ($i = 1; $i -lt $data.Count; $i++) {
+    $row = $data[$i]
     foreach ($column in $row.PSObject.Properties) {
         if ($column.Value -is [string]) {
             if ($choice -eq 'r') {
