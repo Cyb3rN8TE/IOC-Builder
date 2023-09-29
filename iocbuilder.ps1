@@ -2,7 +2,6 @@ Add-Type -AssemblyName System.Windows.Forms
 Add-Type -AssemblyName System.Drawing
 
 # Set dimensions for PowerShell window
-
 $Width = 170
 $Height = 60
 [Console]::SetWindowSize($Width, $Height)
@@ -30,11 +29,11 @@ if ([string]::IsNullOrEmpty($openFileDialog.FileName)) {
     Exit
 }
 
-# Ask the user if they want to refang or defang
-$choice = Read-Host "Do you want to refang or defang? Enter 'r' for refang and 'd' for defang"
+# Ask the user if they want to defang or refang
+$choice = Read-Host "Do you want to defang or refang the data? Enter 'd' for defang or 'r' for refang"
 
 # Check if the user entered a valid choice
-if ($choice -ne 'r' -and $choice -ne 'd') {
+if ($choice -ne 'd' -and $choice -ne 'r') {
     Write-Host "Invalid choice. Exiting script."
     Exit
 }
@@ -42,36 +41,17 @@ if ($choice -ne 'r' -and $choice -ne 'd') {
 # Load the CSV file
 $data = Import-Csv $openFileDialog.FileName
 
-# Process the header row
-foreach ($column in $data[0].PSObject.Properties) {
-    if ($column.Value -is [string]) {
-        if ($choice -eq 'r') {
-            # Refang any IP address or URL found in the column
-            $column.Value = $column.Value -replace '\[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]', '$1'
-            $column.Value = $column.Value -replace '\[(\w+://[^/]+)(/.+)?\]', '$1$2'
-            $column.Value = $column.Value -replace '\[(\.|:)]', '$1'
-        } else {
-            # Defang any IP address or URL found in the column
-            $column.Value = $column.Value -replace '(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', '[$1]'
-            $column.Value = $column.Value -replace '(\.|:)', '[$&]'
-        }
-    }
-}
-
-# Iterate over each row in the CSV (starting from the second row)
-for ($i = 1; $i -lt $data.Count; $i++) {
+# Process all rows, including the header row
+for ($i = 0; $i -lt $data.Count; $i++) {
     $row = $data[$i]
     foreach ($column in $row.PSObject.Properties) {
         if ($column.Value -is [string]) {
-            if ($choice -eq 'r') {
-                # Refang any IP address or URL found in the column
-                $column.Value = $column.Value -replace '\[(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})\]', '$1'
-                $column.Value = $column.Value -replace '\[(\w+://[^/]+)(/.+)?\]', '$1$2'
-                $column.Value = $column.Value -replace '\[(\.|:)]', '$1'
+            if ($choice -eq 'd') {
+                # Defang by replacing '.' with '[.]'
+                $column.Value = $column.Value -replace '\.', '[.]'
             } else {
-                # Defang any IP address or URL found in the column
-                $column.Value = $column.Value -replace '(\d{1,3}\.\d{1,3}\.\d{1,3}\.\d{1,3})', '[$1]'
-                $column.Value = $column.Value -replace '(\.|:)', '[$&]'
+                # Refang by finding '[.]' and replacing with '.'
+                $column.Value = $column.Value -replace '\[\.\]', '.'
             }
         }
     }
