@@ -1,6 +1,6 @@
 # IOC Builder
 
-![alt text](https://github.com/nwjohns101/IOC-Builder/blob/Dev/Images/logo.png) 
+![alt text](https://github.com/Cyb3rN8TE/IOC-Builder/blob/Dev/Images/Logo.png) 
 
 **PowerShell script that refangs or defangs IP addresses, domains and URLs in a spreadsheet (.CSV) containing Indicators of Compromise (IOC)**
 
