@@ -4,9 +4,9 @@
 
 **PowerShell script that refangs or defangs IP addresses, domains and URLs in a spreadsheet (.CSV) containing Indicators of Compromise (IOC)**
 
-**Why did I make this?**
+**Introduction**
 
-Indicators of Compromise (IOC) are often provided with defanged values in spreadsheet format. My tool can sort through the data, refanging any IP addresses which makes it easier to import into other programs etc.
+IOC Builder is a versatile PowerShell script designed to streamline the management of Indicators of Compromise (IOCs) contained within CSV files. This script simplifies the process of defanging or refanging these IOCs, ensuring they are well-prepared for further analysis or integration with other tools.
 
 **What does it do?**
 1) Imports raw .CSV that the user selects
