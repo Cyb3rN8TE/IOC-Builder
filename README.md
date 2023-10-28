@@ -13,6 +13,3 @@ Indicators of Compromise (IOC) are often provided with defanged values in spread
 2) Searches the spreadsheet for all IP addresses, domains and URLs
 3) Refangs or defangs any values that are IP addresses, domains or URLs
 5) Saves the resulting .CSV file with a name and location of the users selection. 
-
-**How to run the tool:**
-1) Right click iocbuilder.ps1 and select 'run with PowerShell'
